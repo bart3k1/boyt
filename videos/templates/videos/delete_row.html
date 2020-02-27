@@ -1,0 +1,16 @@
+{% extends "videos/base.html" %}
+
+{% block content %}
+
+    <div class="container">
+     <h2>Delete Row: {{ row.title }}?</h2>
+        <form method="POST">
+         {% csrf_token %}
+         {{ form.as_p }}
+            <button type="submit" class="btn btn-danger"> Delete </button>
+     </form>
+    <br>
+        <h4> Check Row: <a href="{% url 'detail_row' row.id %}">{{ row.title }}</a> </h4>
+    </div>
+
+{% endblock %}

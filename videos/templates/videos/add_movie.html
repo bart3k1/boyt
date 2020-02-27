@@ -1,0 +1,45 @@
+{% extends "videos/base.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="col-6 pt-3"><h2>Add Movie</h2></div>
+        <form method="POST">
+
+            {% csrf_token %}
+            {% load widget_tweaks %}
+
+            {% for i in form %}
+                <div class="col-6 form-group {% if i.errors %}alert alert-danger {% endif %}">
+                    {{ i.errors }}
+                    {#                    <b>{{ i.label_tag }}</b>#}
+                    {% render_field i placeholder=i.label class="form-control" %}
+
+                </div>
+            {% endfor %}
+
+            <div class="col-6">
+                <button type="submit" class="btn btn-primary"> Create</button>
+            </div>
+        </form>
+        <div class="col-6 pt-3">
+            <h2>OR</h2>
+        </div>
+        <form>
+            {% load widget_tweaks %}
+
+
+            {% for i in search_form %}
+                <div class="col-6 form-group">
+                    {#                    <b>{{ i.label_tag }}</b>#}
+                    {% render_field i placeholder=i.label class="form-control" %}
+
+                </div>
+            {% endfor %}
+
+
+        </form>
+
+    </div>
+
+{% endblock %}
