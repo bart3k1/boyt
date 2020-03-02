@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.http import Http404, JsonResponse
 from django.shortcuts import render, redirect
@@ -16,20 +17,30 @@ YOUTUBE_API_KEY = "AIzaSyBeUCedZda4PQu1CyG-8oJTRNZa_5kRc50"
 
 
 def home(request):
-    return render(request, "videos/home.html")
+    recent_rows = Row.objects.all().order_by("-id")[:3]
+    popular_rows = [Row.objects.get(pk=5), Row.objects.get(pk=4), Row.objects.get(pk=2)]
+    return render(request, "videos/home.html", {"recent_rows": recent_rows, "popular_rows": popular_rows})
 
 
+@login_required()
 def dashboard(request):
     rows = Row.objects.filter(user=request.user)
     return render(request, "videos/dashboard.html", {"rows": rows})
 
 
-class DeleteMovie(generic.DeleteView):
+class DeleteMovie(LoginRequiredMixin, generic.DeleteView):
     model = Movies
     template_name = "videos/delete_movie.html"
     success_url = reverse_lazy("dashboard")
 
+    def get_object(self):
+        movie = super(DeleteMovie, self).get_object()
+        if not movie.row.user == self.request.user:
+            raise Http404
+        return movie
 
+
+@login_required()
 def movie_search(request):
     search_form = SearchForm(request.GET)
     if search_form.is_valid():
@@ -81,8 +92,7 @@ def add_movie(request, pk):
     return render(request, "videos/add_movie.html", {"form": form, "search_form": search_form, "row": row})
 
 
-# @login_required(login_url="/signup")
-class CreateRow(generic.CreateView):
+class CreateRow(LoginRequiredMixin, generic.CreateView):
     model = Row
     fields = ["title"]
     template_name = "videos/create_row.html"
@@ -100,22 +110,34 @@ class DetailRow(generic.DetailView):
     template_name = "videos/detail_row.html"
 
 
-class UpdateRow(generic.UpdateView):
+class UpdateRow(LoginRequiredMixin, generic.UpdateView):
     model = Row
     template_name = "videos/update_row.html"
     fields = ["title"]
     success_url = reverse_lazy("dashboard")
 
+    def get_object(self):
+        row = super(UpdateRow, self).get_object()
+        if not row.user == self.request.user:
+            raise Http404
+        return row
 
-class DeleteRow(generic.DeleteView):
+
+class DeleteRow(LoginRequiredMixin, generic.DeleteView):
     model = Row
     template_name = "videos/delete_row.html"
     success_url = reverse_lazy("dashboard")
 
+    def get_object(self):
+        row = super(DeleteRow, self).get_object()
+        if not row.user == self.request.user:
+            raise Http404
+        return row
+
 
 class SignUp(generic.CreateView):
     form_class = UserCreationForm
-    success_url = reverse_lazy("home")
+    success_url = reverse_lazy("dashboard")
     template_name = "registration/signup.html"
 
     # add automatic login after signup

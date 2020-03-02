@@ -1,9 +1,73 @@
 {% extends "videos/base.html" %}
 
 {% block content %}
+    <section class="jumbotron text-center">
+        <div class="container">
+        <h1>  Create Your own YouTube Collection</h1>
+            <p class="lead text-muted"> Show us  best of the best videos</p>
+            <a href="{% url "create_row" %}" class="btn btn-primary">Create Your Collection</a>
+        </div>
+    </section>
 
     <div class="container">
-    HELLO WORLD
+        <h1 class="text-center">Popular Collections</h1>
+
+         {% for row in popular_rows %}
+            <h3><a href="{% url "detail_row" row.id %}">{{ row.title }}</a></h3>
+
+{#            <a href="{% url "delete_row" row.id %}" class="btn btn-danger">Delete</a>#}
+{#            <a href="{% url "update_row" row.id %}" class="btn btn-primary">Edit</a>#}
+{#            <a href="{% url "add_movie" row.id %}" class="btn btn-primary">Add video</a>#}
+
+            <div class="row">
+
+                {% for movie in row.movies_set.all %}
+
+                    <div class="col-md-4 mt-3">
+                        <div class="card mb-4 shadow-sm">
+                            <iframe width="100%" height="225"
+                                    src="https://www.youtube.com/embed/{{ movie.youtube_id }}"
+                                    frameborder="0" allow="accelerometer; autoplay; encrypted-media; ' +
+                    'gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <div class="card-body"><p class="card-text">{{ movie.title }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+    <h1 class="text-center">Recent Collections</h1>
+
+         {% for row in recent_rows %}
+            <h3><a href="{% url "detail_row" row.id %}">{{ row.title }}</a></h3>
+
+{#            <a href="{% url "delete_row" row.id %}" class="btn btn-danger">Delete</a>#}
+{#            <a href="{% url "update_row" row.id %}" class="btn btn-primary">Edit</a>#}
+{#            <a href="{% url "add_movie" row.id %}" class="btn btn-primary">Add video</a>#}
+
+            <div class="row">
+
+                {% for movie in row.movies_set.all %}
+
+                    <div class="col-md-4 mt-3">
+                        <div class="card mb-4 shadow-sm">
+                            <iframe width="100%" height="225"
+                                    src="https://www.youtube.com/embed/{{ movie.youtube_id }}"
+                                    frameborder="0" allow="accelerometer; autoplay; encrypted-media; ' +
+                    'gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <div class="card-body"><p class="card-text">{{ movie.title }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                {% endfor %}
+            </div>
+        {% endfor %}
+
     </div>
 
 {% endblock %}

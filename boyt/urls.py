@@ -17,7 +17,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.contrib.auth.decorators import login_required
 from django.urls import path
 from videos import views
 
@@ -31,7 +30,7 @@ urlpatterns = [
     path('login', auth_views.LoginView.as_view(), name="login"),
     path('logout', auth_views.LogoutView.as_view(), name="logout"),
     #Rows
-    path('row/create', login_required(views.CreateRow.as_view()), name="create_row"),
+    path('row/create', views.CreateRow.as_view(), name="create_row"),
     path('row/<int:pk>', views.DetailRow.as_view(), name="detail_row"),
     path('row/<int:pk>/delete', views.DeleteRow.as_view(), name="delete_row"),
     path('row/<int:pk>/update', views.UpdateRow.as_view(), name="update_row"),

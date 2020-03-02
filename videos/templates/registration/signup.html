@@ -3,24 +3,34 @@
 {% block content %}
 
     <div class="container">
-      <div class="container">
-        <h2>Sign Up!</h2>
-      </div>
+        <div class="col-6">
+            <h2>Sign Up!</h2>
+        </div>
         <form method="POST">
             {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for err in form.non_field_errors %}
+                        <p>{{ err }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+
             {% load widget_tweaks %}
 
             {% for i in form %}
                 <div class="col-6 form-group {% if i.errors %}alert alert-danger {% endif %}">
                     {{ i.errors }}
-                    {#                    <b>{{ i.label_tag }}</b>#}
+                    {#                                        <b>{{ i.label_tag }}</b>#}
                     {% render_field i placeholder=i.label class="form-control" %}
-
+                    {% if i.help_text %} <small class="text-muted">{{ i.help_text|safe }}</small>{% endif %}
                 </div>
             {% endfor %}
-          <div class="container">
-            <button type="submit" class="btn btn-primary"> Sign Up!</button>
-          </div>
+            <div class="col-6">
+                <button type="submit" class="btn btn-primary"> Sign Up!</button>
+            </div>
         </form>
 
     </div>
