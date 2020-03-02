@@ -13,7 +13,7 @@ import urllib
 import requests
 from django.forms.utils import ErrorList
 
-YOUTUBE_API_KEY = "AIzaSyBeUCedZda4PQu1CyG-8oJTRNZa_5kRc50"
+YOUTUBE_API_KEY = ""
 
 
 def home(request):
