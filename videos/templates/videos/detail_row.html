@@ -3,15 +3,40 @@
 {% block content %}
 
     <div class="container">
-        DETAILS
-        <h1>
-            {{ row.title }}
 
-        </h1>
-        <h4>
-            {{ row.user.username }}
+        <h3><a href="{% url "detail_row" row.id %}">{{ row.title }}</a></h3>
+        <h4>Collection made by: {{ row.user.username }}</h4>
 
-        </h4>
+        {% if user.id == row.user_id %}
+            <a href="{% url "delete_row" row.id %}" class="btn btn-danger">Delete Collection</a>
+            <a href="{% url "update_row" row.id %}" class="btn btn-primary">Edit</a>
+            <a href="{% url "add_movie" row.id %}" class="btn btn-primary">Add video</a>
+        {% endif %}
+        <div class="row">
+
+            {% for movie in row.movies_set.all %}
+
+                <div class="col-md-4 mt-3">
+                    <div class="card mb-4 shadow-sm">
+                        <iframe width="100%" height="225"
+                                src="https://www.youtube.com/embed/{{ movie.youtube_id }}"
+                                frameborder="0" allow="accelerometer; autoplay; encrypted-media; ' +
+                    'gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="card-body"><p class="card-text">{{ movie.title }}</p>
+                            {% if user.id == row.user_id %}
+                                <a href="{% url "delete_movie" movie.id %}" class="btn btn-danger">Delete Movie</a>
+                            {% endif %}
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            {% endfor %}
+        </div>
+
+
     </div>
 
 {% endblock %}

@@ -3,15 +3,29 @@
 {% block content %}
 
     <div class="container">
-     <h2>Edit Row</h2>
+     <div class="col-6">
+        <h2>Edit Collection</h2>
+     </div>
         <form method="POST">
          {% csrf_token %}
-         {{ form.as_p }}
+
+            {% load widget_tweaks %}
+
+            {% for i in form %}
+                <div class="col-6 form-group {% if i.errors %}alert alert-danger {% endif %}">
+                    {{ i.errors }}
+                    {#                    <b>{{ i.label_tag }}</b>#}
+                    {% render_field i placeholder=i.label class="form-control" %}
+
+                </div>
+            {% endfor %}
+        <div class="col-6">
             <button type="submit" class="btn btn-primary"> Save </button>
-     </form>
 
-    <a href="{% url 'delete_row' row.id %}" class="btn btn-danger"> Delete Row</a>
+        </form>
 
+    <a href="{% url 'delete_row' row.id %}" class="btn btn-danger"> Delete Collection</a>
+</div>
     </div>
 
 {% endblock %}

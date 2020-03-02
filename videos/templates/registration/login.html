@@ -3,13 +3,24 @@
 {% block content %}
 
     <div class="container">
+     <div class="col-6">
         <h2>Login!</h2>
+       </div>
         <form method="POST">
             {% csrf_token %}
-            <table>
-                {{ form.as_table }}
-            </table>
+             {% load widget_tweaks %}
+
+            {% for i in form %}
+                <div class="col-6 form-group {% if i.errors %}alert alert-danger {% endif %}">
+                    {{ i.errors }}
+                    {#                    <b>{{ i.label_tag }}</b>#}
+                    {% render_field i placeholder=i.label class="form-control" %}
+
+                </div>
+            {% endfor %}
+         <div class="col-6">
             <button type="submit" class="btn btn-primary"> Login!</button>
+         </div>
         </form>
 
     </div>

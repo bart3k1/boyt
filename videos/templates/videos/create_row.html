@@ -3,12 +3,27 @@
 {% block content %}
 
     <div class="container">
-     <h2>Create Row</h2>
+        <div class="col-6">
+            <h2>Create Collection</h2>
+        </div>
         <form method="POST">
-         {% csrf_token %}
-         {{ form.as_p }}
-            <button type="submit" class="btn btn-primary"> Create </button>
-     </form>
+            {% csrf_token %}
+            {% load widget_tweaks %}
+
+            {% for i in form %}
+                <div class="col-6 form-group {% if i.errors %}alert alert-danger {% endif %}">
+                    {{ i.errors }}
+                    {#                    <b>{{ i.label_tag }}</b>#}
+                    {% render_field i placeholder=i.label class="form-control" %}
+
+                </div>
+            {% endfor %}
+
+
+            <div class="col-6">
+                <button type="submit" class="btn btn-primary"> Create</button>
+            </div>
+        </form>
     </div>
 
 {% endblock %}
